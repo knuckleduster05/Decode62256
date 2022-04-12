@@ -24,7 +24,9 @@ public:
 protected: //vars
 	std::auto_ptr< Decode62256AnalyzerSettings > mSettings;
 	std::auto_ptr< Decode62256AnalyzerResults > mResults;
-	AnalyzerChannelData* mSerial;
+	AnalyzerChannelData* mCE;
+	AnalyzerChannelData* mWE;
+	AnalyzerChannelData* mOE;
 
 	Decode62256SimulationDataGenerator mSimulationDataGenerator;
 	bool mSimulationInitilized;
@@ -33,6 +35,11 @@ protected: //vars
 	U32 mSampleRateHz;
 	U32 mStartOfStopBitOffset;
 	U32 mEndOfStopBitOffset;
+	U32 mCEA;
+	U32 mWEA;
+	U32 mOEA;
+	U64 currentSample;
+	U64 nextSample;
 };
 
 extern "C" ANALYZER_EXPORT const char* __cdecl GetAnalyzerName();

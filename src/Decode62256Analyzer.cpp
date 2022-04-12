@@ -8,6 +8,7 @@ Decode62256Analyzer::Decode62256Analyzer()
 	mSimulationInitilized( false )
 {
 	SetAnalyzerSettings( mSettings.get() );
+	UseFrameV2();
 }
 
 Decode62256Analyzer::~Decode62256Analyzer()
@@ -26,6 +27,72 @@ void Decode62256Analyzer::WorkerThread()
 {
 	//
 	mSampleRateHz = GetSampleRate();
+	
+	mWE = GetAnalyzerChannelData( mSettings->mWriteEnableChannel );
+	mOE = GetAnalyzerChannelData( mSettings->mOutputEnableChannel );
+	mCE = GetAnalyzerChannelData( mSettings->mChipEnableChannel );
+	
+	if(mSettings->mWriteEnableActiveState == ActiveLow ) {
+		mWEA = BIT_LOW;
+	} else { //WE Active High
+		mWEA = BIT_HIGH;
+	}
+	
+	if(mSettings->mOutputEnableActiveState == ActiveLow ) {
+		mOEA = BIT_LOW;
+	} else { //OE Active High
+		mOEA = BIT_HIGH;
+	}
+	
+	if(mSettings->mChipEnableActiveState == ActiveLow ) {
+		mCEA = BIT_LOW;
+	} else { //CE Active High
+		mCEA = BIT_HIGH;
+	}
+	
+	currentSample = mCE->GetSampleNumber();
+	
+	for( ; ; ) {
+		Frame frame;
+		frame.mFlags = 0;
+		
+		if(mCE->GetBitState() == mCEA) { //CE is active, not in standby
+			if(mWE->GetBitState() == mWEA) {
+				frame.mData1 = "Write";
+			} else {
+				//Write Enable is not active
+				if(mOE->GetBitState() == mOEA) {
+					frame.mData1 = "Read";
+				} else {
+					frame.mData1 = "Output Disable";
+				}
+			}
+		} else { //Standby mode
+			frame.mData1 = "Standby";
+		}
+		frame.mStartingSampleInclusive = currentSample;
+		
+		//get next sample
+		nextSample = mWE->GetSampleOfNextEdge()-1;
+		if((mOE->GetSampleOfNextEdge()-1) < nextSample)
+			nextSample = mOE->GetSampleOfNextEdge()-1;
+		if((mCE->GetSampleOfNextEdge()-1) < nextSample)
+			nextSample = mCE->GetSampleOfNextEdge()-1;
+		
+		frame.mEndingSampleInclusive = nextSample;
+		
+		mResults->AddFrame( frame );
+		mResults->CommitResults();
+		ReportProgress( frame.mEndingSampleInclusive );
+		
+		//advance channels to next sample start
+		currentSample = nextSample;
+		mWE->AdvanceToAbsPosition(currentSample);
+		mOE->AdvanceToAbsPosition(currentSample);
+		mCE->AdvanceToAbsPosition(currentSample);
+	}
+	
+	
 /*
 	mSerial = GetAnalyzerChannelData( mSettings->mInputChannel );
 

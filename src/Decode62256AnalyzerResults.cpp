@@ -22,7 +22,7 @@ void Decode62256AnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& c
 	Frame frame = GetFrame( frame_index );
 
 	char number_str[128];
-	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
+	AnalyzerHelpers::GetNumberString( frame.mData1, DisplayBase::ASCII, 8, number_str, 128 );
 	AddResultString( number_str );
 }
 
