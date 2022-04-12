@@ -24,19 +24,48 @@ void Decode62256AnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& c
 	char number_str[128];
 	switch(frame.mData1) {
 		case 'W':
-			strcpy("Write", number_str);
+			number_str[0] = 'W';
+			number_str[1] = 'r';
+			number_str[2] = 'i';
+			number_str[3] = 't';
+			number_str[4] = 'e';
 			break;
 		case 'R':
-			strcpy("Read", number_str);
+			number_str[0] = 'R';
+			number_str[1] = 'e';
+			number_str[2] = 'a';
+			number_str[3] = 'd';
 			break;
 		case 'S':
-			strcpy("Standby", number_str);
+			number_str[0] = 'S';
+			number_str[1] = 't';
+			number_str[2] = 'a';
+			number_str[3] = 'n';
+			number_str[4] = 'd';
+			number_str[5] = 'b';
+			number_str[6] = 'y';
 			break;
 		case 'X':
-			strcpy("Output Disabled", number_str);
+			number_str[0] = 'O';
+			number_str[1] = 'u';
+			number_str[2] = 't';
+			number_str[3] = 'p';
+			number_str[4] = 'u';
+			number_str[5] = 't';
+			number_str[6] = ' ';
+			number_str[7] = 'D';
+			number_str[8] = 'i';
+			number_str[9] = 's';
+			number_str[10] = 'a';
+			number_str[11] = 'b';
+			number_str[12] = 'l';
+			number_str[13] = 'e';
+			number_str[14] = 'd';
 			break;
 		default:
-			strcpy("Err", number_str);
+			number_str[0] = 'E';
+			number_str[1] = 'r';
+			number_str[2] = 'r';
 			break;
 	}
 	//AnalyzerHelpers::GetNumberString( frame.mData1, DisplayBase::ASCII, 8, number_str, 128 );
