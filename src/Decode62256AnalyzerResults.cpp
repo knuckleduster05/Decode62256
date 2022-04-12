@@ -22,7 +22,24 @@ void Decode62256AnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& c
 	Frame frame = GetFrame( frame_index );
 
 	char number_str[128];
-	AnalyzerHelpers::GetNumberString( frame.mData1, DisplayBase::ASCII, 8, number_str, 128 );
+	switch(frame.mData1) {
+		case 'W':
+			strcpy("Write", number_str);
+			break;
+		case 'R':
+			strcpy("Read", number_str);
+			break;
+		case 'S':
+			strcpy("Standby", number_str);
+			break;
+		case 'X':
+			strcpy("Output Disabled", number_str);
+			break;
+		default:
+			strcpy("Err", number_str);
+			break;
+	}
+	//AnalyzerHelpers::GetNumberString( frame.mData1, DisplayBase::ASCII, 8, number_str, 128 );
 	AddResultString( number_str );
 }
 
