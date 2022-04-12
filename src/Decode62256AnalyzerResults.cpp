@@ -1,22 +1,22 @@
-#include "SimpleSerialAnalyzerResults.h"
+#include "Decode62256AnalyzerResults.h"
 #include <AnalyzerHelpers.h>
-#include "SimpleSerialAnalyzer.h"
-#include "SimpleSerialAnalyzerSettings.h"
+#include "Decode62256Analyzer.h"
+#include "Decode62256AnalyzerSettings.h"
 #include <iostream>
 #include <fstream>
 
-SimpleSerialAnalyzerResults::SimpleSerialAnalyzerResults( SimpleSerialAnalyzer* analyzer, SimpleSerialAnalyzerSettings* settings )
+Decode62256AnalyzerResults::Decode62256AnalyzerResults( Decode62256Analyzer* analyzer, Decode62256AnalyzerSettings* settings )
 :	AnalyzerResults(),
 	mSettings( settings ),
 	mAnalyzer( analyzer )
 {
 }
 
-SimpleSerialAnalyzerResults::~SimpleSerialAnalyzerResults()
+Decode62256AnalyzerResults::~Decode62256AnalyzerResults()
 {
 }
 
-void SimpleSerialAnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& channel, DisplayBase display_base )
+void Decode62256AnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& channel, DisplayBase display_base )
 {
 	ClearResultStrings();
 	Frame frame = GetFrame( frame_index );
@@ -26,7 +26,7 @@ void SimpleSerialAnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& 
 	AddResultString( number_str );
 }
 
-void SimpleSerialAnalyzerResults::GenerateExportFile( const char* file, DisplayBase display_base, U32 export_type_user_id )
+void Decode62256AnalyzerResults::GenerateExportFile( const char* file, DisplayBase display_base, U32 export_type_user_id )
 {
 	std::ofstream file_stream( file, std::ios::out );
 
@@ -58,7 +58,7 @@ void SimpleSerialAnalyzerResults::GenerateExportFile( const char* file, DisplayB
 	file_stream.close();
 }
 
-void SimpleSerialAnalyzerResults::GenerateFrameTabularText( U64 frame_index, DisplayBase display_base )
+void Decode62256AnalyzerResults::GenerateFrameTabularText( U64 frame_index, DisplayBase display_base )
 {
 #ifdef SUPPORTS_PROTOCOL_SEARCH
 	Frame frame = GetFrame( frame_index );
@@ -70,13 +70,13 @@ void SimpleSerialAnalyzerResults::GenerateFrameTabularText( U64 frame_index, Dis
 #endif
 }
 
-void SimpleSerialAnalyzerResults::GeneratePacketTabularText( U64 packet_id, DisplayBase display_base )
+void Decode62256AnalyzerResults::GeneratePacketTabularText( U64 packet_id, DisplayBase display_base )
 {
 	//not supported
 
 }
 
-void SimpleSerialAnalyzerResults::GenerateTransactionTabularText( U64 transaction_id, DisplayBase display_base )
+void Decode62256AnalyzerResults::GenerateTransactionTabularText( U64 transaction_id, DisplayBase display_base )
 {
 	//not supported
 }
