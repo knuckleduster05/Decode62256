@@ -24,6 +24,7 @@ void Decode62256Analyzer::SetupResults()
 
 void Decode62256Analyzer::WorkerThread()
 {
+	//
 	mSampleRateHz = GetSampleRate();
 /*
 	mSerial = GetAnalyzerChannelData( mSettings->mInputChannel );
