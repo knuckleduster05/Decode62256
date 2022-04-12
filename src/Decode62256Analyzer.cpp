@@ -56,7 +56,7 @@ void Decode62256Analyzer::WorkerThread()
 		//FrameV2 = frame_v2;
 		Frame frame;
 		frame.mFlags = 0;
-		
+		/*
 		if(mCE->GetBitState() == mCEA) { //CE is active, not in standby
 			if(mWE->GetBitState() == mWEA) {
 				frame.mData1 = std::stoull("Write");
@@ -71,6 +71,8 @@ void Decode62256Analyzer::WorkerThread()
 		} else { //Standby mode
 			frame.mData1 = std::stoull("Standby");
 		}
+		*/
+		frame.mData1 = 'F';
 		frame.mStartingSampleInclusive = currentSample;
 		
 		//get next sample
