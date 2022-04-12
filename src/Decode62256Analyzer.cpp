@@ -19,7 +19,7 @@ void Decode62256Analyzer::SetupResults()
 {
 	mResults.reset( new Decode62256AnalyzerResults( this, mSettings.get() ) );
 	SetAnalyzerResults( mResults.get() );
-	mResults->AddChannelBubblesWillAppearOn( mSettings->mInputChannel );
+	mResults->AddChannelBubblesWillAppearOn( mSettings->mChipEnableChannel );
 }
 
 void Decode62256Analyzer::WorkerThread()
