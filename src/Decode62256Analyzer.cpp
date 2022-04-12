@@ -74,6 +74,7 @@ void Decode62256Analyzer::WorkerThread()
 		frame.mStartingSampleInclusive = currentSample;
 		
 		//get next sample
+		/*
 		nextSample = mWE->GetSampleOfNextEdge()-1;
 		if((mOE->GetSampleOfNextEdge()-1) < nextSample)
 			nextSample = mOE->GetSampleOfNextEdge()-1;
@@ -81,16 +82,25 @@ void Decode62256Analyzer::WorkerThread()
 			nextSample = mCE->GetSampleOfNextEdge()-1;
 		
 		frame.mEndingSampleInclusive = nextSample;
+		*/
+		
+		frame.mEndingSampleInclusive = mCE->GetSampleOfNextEdge()-1;
+		
+		mCE->AdvanceToNextEdge();
+		mOE->AdvanceToAbsPosition(mCE->GetSampleNumber());
+		mWE->AdvanceToAbsPosition(mCE->GetSampleNumber());
 		
 		mResults->AddFrame( frame );
 		mResults->CommitResults();
 		ReportProgress( frame.mEndingSampleInclusive );
 		
 		//advance channels to next sample start
+		/*
 		currentSample = nextSample;
 		mWE->AdvanceToAbsPosition(currentSample);
 		mOE->AdvanceToAbsPosition(currentSample);
 		mCE->AdvanceToAbsPosition(currentSample);
+		*/
 	}
 }
 
