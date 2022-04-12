@@ -58,7 +58,7 @@ void Decode62256Analyzer::WorkerThread()
 		
 		if(mCE->GetBitState() == mCEA) { //CE is active, not in standby
 			if(mWE->GetBitState() == mWEA) {
-				frame.mData1 = "Write";
+				frame.mData1 = std::stoull("Write");
 			} else {
 				//Write Enable is not active
 				if(mOE->GetBitState() == mOEA) {
