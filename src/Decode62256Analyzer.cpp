@@ -50,6 +50,10 @@ void Decode62256Analyzer::WorkerThread()
 		mCEA = BIT_HIGH;
 	}
 	
+	if(mCE->GetBitState() != mCEA) {
+		mCE->AdvanceToNextEdge();
+	}
+	
 	currentSample = mCE->GetSampleNumber();
 	
 	for( ; ; ) {
@@ -75,13 +79,19 @@ void Decode62256Analyzer::WorkerThread()
 		//frame.mData1 = 'F';
 		frame.mStartingSampleInclusive = currentSample;
 		
-		//get next sample
+		//get next sample or end of activity
 		
 		nextSample = mWE->GetSampleOfNextEdge()-1;
 		if((mOE->GetSampleOfNextEdge()-1) < nextSample)
 			nextSample = mOE->GetSampleOfNextEdge()-1;
-		if((mCE->GetSampleOfNextEdge()-1) < nextSample)
-			nextSample = mCE->GetSampleOfNextEdge()-1;
+		//if((mCE->GetSampleOfNextEdge()-1) < nextSample)
+		//	nextSample = mCE->GetSampleOfNextEdge()-1;
+		
+		if(mCE->WouldAdvancingToAbsPositionCauseTransition(nextSample)) {
+			//if next edge is after CE is disabled
+			mCE->AdvanceToNextEdge();
+			nextSample = mCE->GetSampleNumber();
+		}
 		
 		frame.mEndingSampleInclusive = nextSample;
 		
@@ -98,6 +108,11 @@ void Decode62256Analyzer::WorkerThread()
 		ReportProgress( frame.mEndingSampleInclusive );
 		
 		//advance channels to next sample start
+		
+		if(mCE->GetBitState() != mCEA) {
+			mCE->AdvanceToNextEdge();
+			nextSample = mCE->GetSampleNumber();
+		}
 		
 		currentSample = nextSample+1;
 		mWE->AdvanceToAbsPosition(currentSample);
