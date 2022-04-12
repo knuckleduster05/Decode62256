@@ -62,13 +62,13 @@ void Decode62256Analyzer::WorkerThread()
 			} else {
 				//Write Enable is not active
 				if(mOE->GetBitState() == mOEA) {
-					frame.mData1 = "Read";
+					frame.mData1 = std::stoull("Read");
 				} else {
-					frame.mData1 = "Output Disable";
+					frame.mData1 = std::stoull("Output Disable");
 				}
 			}
 		} else { //Standby mode
-			frame.mData1 = "Standby";
+			frame.mData1 = std::stoull("Standby");
 		}
 		frame.mStartingSampleInclusive = currentSample;
 		
