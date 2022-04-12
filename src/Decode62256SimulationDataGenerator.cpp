@@ -18,7 +18,7 @@ void Decode62256SimulationDataGenerator::Initialize( U32 simulation_sample_rate,
 	mSimulationSampleRateHz = simulation_sample_rate;
 	mSettings = settings;
 
-	mSerialSimulationData.SetChannel( mSettings->mInputChannel );
+	mSerialSimulationData.SetChannel( mSettings->mWriteEnableChannel );
 	mSerialSimulationData.SetSampleRate( simulation_sample_rate );
 	mSerialSimulationData.SetInitialBitState( BIT_HIGH );
 }
@@ -38,7 +38,7 @@ U32 Decode62256SimulationDataGenerator::GenerateSimulationData( U64 largest_samp
 
 void Decode62256SimulationDataGenerator::CreateSerialByte()
 {
-	U32 samples_per_bit = mSimulationSampleRateHz / mSettings->mBitRate;
+	U32 samples_per_bit = 1;
 
 	U8 byte = mSerialText[ mStringIndex ];
 	mStringIndex++;
