@@ -3,28 +3,60 @@
 
 
 Decode62256AnalyzerSettings::Decode62256AnalyzerSettings()
-:	mInputChannel( UNDEFINED_CHANNEL ),
-	mBitRate( 9600 )
+:	mWriteEnableChannel( UNDEFINED_CHANNEL ),
+	mOutputEnableChannel( UNDEFINED_CHANNEL ),
+	mChipEnableChannel ( UNDEFINED_CHANNEL ),
+	mWriteEnableActiveState ( ActiveLow ),
+	mOutputEnableActiveState ( ActiveLow ),
+	mChipEnableActiveState ( ActiveLow )
 {
-	mInputChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
-	mInputChannelInterface->SetTitleAndTooltip( "Serial", "Standard 62256 Decoder" );
-	mInputChannelInterface->SetChannel( mInputChannel );
+	mWriteEnableChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
+	mWriteEnableChannelInterface->SetTitleAndTooltip( "WE", "Write Enable");
+	mWriteEnableChannelInterface->SetChannel( mWriteEnableChannel );
+	
+	mWriteEnableActiveStateInterface.reset( new AnalyzerSettingInterfaceNumberList() );
+	mWriteEnableActiveStateInterface->SetTitleAndTooltip("Active State", "Active State" );
+	mWriteEnableActiveStateInterface->AddNumber(ActiveLow, "Active Low", "");
+	mWriteEnableActiveStateInterface->AddNumber(ActiveHigh, "Active High", "");
+	mWriteEnableActiveStateInterface->SetNumber( mWriteEnableActiveState );
 
-	mBitRateInterface.reset( new AnalyzerSettingInterfaceInteger() );
-	mBitRateInterface->SetTitleAndTooltip( "Bit Rate (Bits/S)",  "Specify the bit rate in bits per second." );
-	mBitRateInterface->SetMax( 6000000 );
-	mBitRateInterface->SetMin( 1 );
-	mBitRateInterface->SetInteger( mBitRate );
-
-	AddInterface( mInputChannelInterface.get() );
-	AddInterface( mBitRateInterface.get() );
-
+	mOutputEnableChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
+	mOutputEnableChannelInterface->SetTitleAndTooltip( "OE", "Output Enable");
+	mOutputEnableChannelInterface->SetChannel( mOutputEnableChannel );
+	
+	mOutputEnableActiveStateInterface.reset( new AnalyzerSettingInterfaceNumberList() );
+	mOutputEnableActiveStateInterface->SetTitleAndTooltip("Active State", "Active State" );
+	mOutputEnableActiveStateInterface->AddNumber(ActiveLow, "Active Low", "");
+	mOutputEnableActiveStateInterface->AddNumber(ActiveHigh, "Active High", "");
+	mOutputEnableActiveStateInterface->SetNumber( mOutputEnableActiveState );
+	
+	mChipEnableChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
+	mChipEnableChannelInterface->SetTitleAndTooltip( "CE", "Chip Enable");
+	mChipEnableChannelInterface->SetChannel( mChipEnableChannel );
+	
+	mChipEnableActiveStateInterface.reset( new AnalyzerSettingInterfaceNumberList() );
+	mChipEnableActiveStateInterface->SetTitleAndTooltip("Active State", "Active State" );
+	mChipEnableActiveStateInterface->AddNumber(ActiveLow, "Active Low", "");
+	mChipEnableActiveStateInterface->AddNumber(ActiveHigh, "Active High", "");
+	mChipEnableActiveStateInterface->SetNumber( mChipEnableActiveState );
+	
+	AddInterface( mWriteEnableChannelInterface.get());
+	AddInterface( mWriteEnableActiveStateInterface.get() );
+	AddInterface( mOutputEnableChannelInterface.get() );
+	AddInterface( mOutputEnableActiveStateInterface.get() );
+	AddInterface( mChipEnableChannelInterface.get() );
+	AddInterface( mChipEnableActiveStateInterface.get() );
+	
 	AddExportOption( 0, "Export as text/csv file" );
 	AddExportExtension( 0, "text", "txt" );
 	AddExportExtension( 0, "csv", "csv" );
 
 	ClearChannels();
-	AddChannel( mInputChannel, "Serial", false );
+	
+	AddChannel( mWriteEnableChannel, "WE", false);
+	AddChannel( mOutputEnableChannel, "OE", false);
+	AddChannel( mChipEnableChannel, "CE", false);
+	
 }
 
 Decode62256AnalyzerSettings::~Decode62256AnalyzerSettings()
@@ -33,19 +65,30 @@ Decode62256AnalyzerSettings::~Decode62256AnalyzerSettings()
 
 bool Decode62256AnalyzerSettings::SetSettingsFromInterfaces()
 {
-	mInputChannel = mInputChannelInterface->GetChannel();
-	mBitRate = mBitRateInterface->GetInteger();
+	mWriteEnableChannel = mWriteEnableChannelInterface->GetChannel();
+	mWriteEnableActiveState = ActiveState( U32( mWriteEnableActiveStateInterface->GetNumber() ) );
+	mOutputEnableChannel = mOutputEnableChannelInterface->GetChannel();
+	mOutputEnableActiveState = ActiveState( U32( mOutputEnableActiveStateInterface->GetNumber() ) );
+	mChipEnableChannel = mChipEnableChannelInterface->GetChannel();
+	mChipEnableActiveState = ActiveState( U32( mChipEnableActiveStateInterface->GetNumber() ) );
 
 	ClearChannels();
-	AddChannel( mInputChannel, "62256 Decoder", true );
+	
+	AddChannel( mWriteEnableChannel, "WE", true );
+	AddChannel( mOutputEnableChannel, "OE", true);
+	AddChannel( mChipEnableChannel, "CE", true);
 
 	return true;
 }
 
 void Decode62256AnalyzerSettings::UpdateInterfacesFromSettings()
 {
-	mInputChannelInterface->SetChannel( mInputChannel );
-	mBitRateInterface->SetInteger( mBitRate );
+	mWriteEnableChannelInterface->SetChannel( mWriteEnableChannel );
+	mWriteEnableActiveStateInterface->SetNumber( mWriteEnableActiveState );
+	mOutputEnableChannelInterface->SetChannel( mOutputEnableChannel );
+	mOutputEnableActiveStateInterface->SetNumber( mOutputEnableActiveState );
+	mChipEnableChannelInterface->SetChannel( mChipEnableChannel );
+	mChipEnableActiveStateInterface->SetNumber( mChipEnableActiveState );
 }
 
 void Decode62256AnalyzerSettings::LoadSettings( const char* settings )
@@ -53,11 +96,18 @@ void Decode62256AnalyzerSettings::LoadSettings( const char* settings )
 	SimpleArchive text_archive;
 	text_archive.SetString( settings );
 
-	text_archive >> mInputChannel;
-	text_archive >> mBitRate;
+	text_archive >> mWriteEnableChannel;
+	text_archive >> mWriteEnableActiveState;
+	text_archive >> mOutputEnableChannel;
+	text_archive >> mOutputEnableActiveState;
+	text_archive >> mChipEnableChannel;
+	text_archive >> mChipEnableActiveState;
 
 	ClearChannels();
-	AddChannel( mInputChannel, "62256 Decoder", true );
+	
+	AddChannel( mWriteEnableChannel, "WE", true );
+	AddChannel( mOutputEnableChannel, "OE", true);
+	AddChannel( mChipEnableChannel, "CE", true);
 
 	UpdateInterfacesFromSettings();
 }
@@ -66,8 +116,12 @@ const char* Decode62256AnalyzerSettings::SaveSettings()
 {
 	SimpleArchive text_archive;
 
-	text_archive << mInputChannel;
-	text_archive << mBitRate;
+	text_archive << mWriteEnableChannel;
+	text_archive << mWriteEnableActiveState;
+	text_archive << mOutputEnableChannel;
+	text_archive << mOutputEnableActiveState;
+	text_archive << mChipEnableChannel;
+	text_archive << mChipEnableActiveState;
 
 	return SetReturnString( text_archive.GetString() );
 }

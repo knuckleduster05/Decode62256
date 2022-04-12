@@ -4,6 +4,8 @@
 #include <AnalyzerSettings.h>
 #include <AnalyzerTypes.h>
 
+enum ActiveState { ActiveHigh, ActiveLow };
+
 class Decode62256AnalyzerSettings : public AnalyzerSettings
 {
 public:
@@ -16,12 +18,20 @@ public:
 	virtual const char* SaveSettings();
 
 	
-	Channel mInputChannel;
-	U32 mBitRate;
+	Channel mWriteEnableChannel;
+	ActiveState mWriteEnableActiveState;
+	Channel mOutputEnableChannel;
+	ActiveState mOutputEnableActiveState;
+	Channel mChipEnableChannel;
+	ActiveState mChipEnableActiveState;
 
 protected:
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mInputChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceInteger >	mBitRateInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mWriteEnableChannelInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceNumberList >	mWriteEnableActiveStateInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mOutputEnableChannelInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceNumberList >	mOutputEnableActiveStateInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mChipEnableChannelInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceNumberList >	mChipEnableActiveStateInterface;
 };
 
 #endif //DECODE62256_ANALYZER_SETTINGS
