@@ -97,11 +97,11 @@ void Decode62256AnalyzerSettings::LoadSettings( const char* settings )
 	text_archive.SetString( settings );
 
 	text_archive >> mWriteEnableChannel;
-	text_archive >> mWriteEnableActiveState;
+	text_archive >> *(U32*) mWriteEnableActiveState;
 	text_archive >> mOutputEnableChannel;
-	text_archive >> mOutputEnableActiveState;
+	text_archive >> *(U32*) mOutputEnableActiveState;
 	text_archive >> mChipEnableChannel;
-	text_archive >> mChipEnableActiveState;
+	text_archive >> *(U32*) mChipEnableActiveState;
 
 	ClearChannels();
 	
