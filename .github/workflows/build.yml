@@ -22,19 +22,19 @@ jobs:
       with:
         name: windows
         path: ${{github.workspace}}/build/Analyzers/Release/*.dll
-  macos:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: |
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
-        cmake --build ${{github.workspace}}/build
-    - name: Upload MacOS build
-      uses: actions/upload-artifact@v2
-      with:
-        name: macos
-        path: ${{github.workspace}}/build/Analyzers/*.so
+#  macos:
+#    runs-on: macos-latest
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: Build
+#      run: |
+#        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+#        cmake --build ${{github.workspace}}/build
+#    - name: Upload MacOS build
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: macos
+#        path: ${{github.workspace}}/build/Analyzers/*.so
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +49,7 @@ jobs:
         name: linux
         path: ${{github.workspace}}/build/Analyzers/*.so
   publish:
-    needs: [windows, macos, linux]
+    needs: [windows, linux] #needs: [windows, macos, linux]
     runs-on: ubuntu-latest
     steps:
     - name: download individual builds
