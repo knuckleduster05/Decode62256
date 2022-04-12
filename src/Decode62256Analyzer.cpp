@@ -99,7 +99,7 @@ void Decode62256Analyzer::WorkerThread()
 		
 		//advance channels to next sample start
 		
-		currentSample = nextSample;
+		currentSample = nextSample+1;
 		mWE->AdvanceToAbsPosition(currentSample);
 		mOE->AdvanceToAbsPosition(currentSample);
 		mCE->AdvanceToAbsPosition(currentSample);
