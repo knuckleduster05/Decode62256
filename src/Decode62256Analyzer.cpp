@@ -56,27 +56,27 @@ void Decode62256Analyzer::WorkerThread()
 		//FrameV2 = frame_v2;
 		Frame frame;
 		frame.mFlags = 0;
-		/*
+		
 		if(mCE->GetBitState() == mCEA) { //CE is active, not in standby
 			if(mWE->GetBitState() == mWEA) {
-				frame.mData1 = std::stoull("Write");
+				frame.mData1 = 'W';
 			} else {
 				//Write Enable is not active
 				if(mOE->GetBitState() == mOEA) {
-					frame.mData1 = std::stoull("Read");
+					frame.mData1 = 'R';
 				} else {
-					frame.mData1 = std::stoull("Output Disable");
+					frame.mData1 = 'X';
 				}
 			}
 		} else { //Standby mode
-			frame.mData1 = std::stoull("Standby");
+			frame.mData1 = 'S';
 		}
-		*/
-		frame.mData1 = 'F';
+		
+		//frame.mData1 = 'F';
 		frame.mStartingSampleInclusive = currentSample;
 		
 		//get next sample
-		/*
+		
 		nextSample = mWE->GetSampleOfNextEdge()-1;
 		if((mOE->GetSampleOfNextEdge()-1) < nextSample)
 			nextSample = mOE->GetSampleOfNextEdge()-1;
@@ -84,25 +84,26 @@ void Decode62256Analyzer::WorkerThread()
 			nextSample = mCE->GetSampleOfNextEdge()-1;
 		
 		frame.mEndingSampleInclusive = nextSample;
-		*/
 		
+		/*
 		frame.mEndingSampleInclusive = mCE->GetSampleOfNextEdge()-1;
 		
 		mCE->AdvanceToNextEdge();
 		mOE->AdvanceToAbsPosition(mCE->GetSampleNumber());
 		mWE->AdvanceToAbsPosition(mCE->GetSampleNumber());
+		*/
 		
 		mResults->AddFrame( frame );
 		mResults->CommitResults();
 		ReportProgress( frame.mEndingSampleInclusive );
 		
 		//advance channels to next sample start
-		/*
+		
 		currentSample = nextSample;
 		mWE->AdvanceToAbsPosition(currentSample);
 		mOE->AdvanceToAbsPosition(currentSample);
 		mCE->AdvanceToAbsPosition(currentSample);
-		*/
+		
 	}
 }
 
