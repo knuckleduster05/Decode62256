@@ -25,7 +25,7 @@ void Decode62256Analyzer::SetupResults()
 void Decode62256Analyzer::WorkerThread()
 {
 	mSampleRateHz = GetSampleRate();
-
+/*
 	mSerial = GetAnalyzerChannelData( mSettings->mInputChannel );
 
 	if( mSerial->GetBitState() == BIT_LOW )
@@ -70,6 +70,7 @@ void Decode62256Analyzer::WorkerThread()
 		mResults->CommitResults();
 		ReportProgress( frame.mEndingSampleInclusive );
 	}
+	*/
 }
 
 bool Decode62256Analyzer::NeedsRerun()
@@ -79,18 +80,18 @@ bool Decode62256Analyzer::NeedsRerun()
 
 U32 Decode62256Analyzer::GenerateSimulationData( U64 minimum_sample_index, U32 device_sample_rate, SimulationChannelDescriptor** simulation_channels )
 {
-	if( mSimulationInitilized == false )
-	{
-		mSimulationDataGenerator.Initialize( GetSimulationSampleRate(), mSettings.get() );
-		mSimulationInitilized = true;
-	}
+	//if( mSimulationInitilized == false )
+	//{
+		//mSimulationDataGenerator.Initialize( GetSimulationSampleRate(), mSettings.get() );
+		//mSimulationInitilized = true;
+	//}
 
 	return mSimulationDataGenerator.GenerateSimulationData( minimum_sample_index, device_sample_rate, simulation_channels );
 }
 
 U32 Decode62256Analyzer::GetMinimumSampleRateHz()
 {
-	return mSettings->mBitRate * 4;
+	return 4;
 }
 
 const char* Decode62256Analyzer::GetAnalyzerName() const
